@@ -107,9 +107,14 @@
 
         fillForm: function( sourceFile, destinationFile, fieldValues, callback ) {
 
-            //Generate the data from the field values.
-            var tempFDF = "data" + (new Date().getTime()) + ".fdf",
-                formData = fdf.generator( fieldValues, tempFDF );
+          let rand = null 
+          require('crypto').randomBytes(20, function(err, buffer) {
+            rand = buffer.toString('hex');
+          });
+
+           //Generate the data from the field values.
+          var tempFDF = "data" + (new Date().getTime()) + rand + ".fdf",
+            formData = fdf.generator( fieldValues, tempFDF );
 
             child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + " flatten", function (error, stdout, stderr) {
 
